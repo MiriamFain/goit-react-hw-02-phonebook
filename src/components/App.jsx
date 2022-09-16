@@ -22,24 +22,24 @@ class App extends Component {
   onAddContact = ({ name, number }) => {
     const normalizedName = name.toLowerCase();
 
-    let isAdded = false;
-    this.state.contacts.forEach(el => {
-      if (el.name.toLowerCase() === normalizedName) {
-        Notify.failure(`${contact.name} is already in contacts`);
-        isAdded = true;
-      }
-    });
-
-    if (isAdded) {
+    if (
+      this.state.contacts.some(
+        contact => contact.name.toLowerCase() === normalizedName
+      )
+    ) {
+      Notify.failure(`${name} is already in contacts`);
       return;
     }
-    const contact = {
-      id: nanoid(),
-      name: name,
-      number: number,
-    };
+
     this.setState(prevState => ({
-      contacts: [...prevState.contacts, contact],
+      contacts: [
+        ...prevState.contacts,
+        {
+          id: nanoid(),
+          name,
+          number,
+        },
+      ],
     }));
   };
 
